@@ -53,5 +53,56 @@ namespace Minesweeper.Tests
             act = () => new Drone(100, 250, 100, 250);
             act.ShouldNotThrow<ArgumentOutOfRangeException>();
         }
+
+        [Fact]
+        public void TestDroneLeftSpins()
+        {
+            FacingDirection[] expectedDirections = 
+            {
+                FacingDirection.North,
+                FacingDirection.West,
+                FacingDirection.South,
+                FacingDirection.East
+            };
+
+            TestDroneSpins(expectedDirections, d => d.SpinLeft());
+        }
+
+        [Fact]
+        public void TestDroneRightSpins()
+        {
+            FacingDirection[] expectedDirections =
+            {
+                FacingDirection.South,
+                FacingDirection.West,
+                FacingDirection.North,
+                FacingDirection.East
+            };
+
+            TestDroneSpins(expectedDirections, d => d.SpinRight());
+        }
+
+        private void TestDroneSpins(FacingDirection[] expectedDirections, Func<Drone,Drone> spinHandler)
+        {
+            var currentDrone = new Drone(100, 100, 50, 50);
+            currentDrone.Direction.Should().Be(FacingDirection.East);
+
+            for (int i = 0; i < expectedDirections.Length; i++)
+            {
+                Drone rotatedDrone = spinHandler(currentDrone);
+                AssertSameDronePositionsAndLimits(currentDrone, rotatedDrone);
+                rotatedDrone.Direction.Should().Be(expectedDirections[i]);
+
+                currentDrone = rotatedDrone;
+            }
+        }
+
+        private void AssertSameDronePositionsAndLimits(Drone d1, Drone d2)
+        {
+            d1.XLimit.Should().Be(d2.XLimit);
+            d1.YLimit.Should().Be(d2.YLimit);
+            d1.X.Should().Be(d2.X);
+            d1.Y.Should().Be(d2.Y);
+        }
     }
 }

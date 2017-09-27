@@ -5,13 +5,15 @@ namespace Minesweeper
     public enum FacingDirection
     {
         East,
-        West,
         North,
+        West,
         South
     };
 
     public class Drone
     {
+        private const int DirectionsCount = 4;
+
         public Drone(int xlimit, int ylimit, int x, int y)
             : this(xlimit, ylimit, x, y, FacingDirection.East)
         {
@@ -34,6 +36,11 @@ namespace Minesweeper
             Direction = dir;
         }
 
+        private Drone(Drone sourceDrone, FacingDirection direction)
+            : this(sourceDrone.XLimit, sourceDrone.YLimit, sourceDrone.X, sourceDrone.Y, direction)
+        {
+        }
+
         public int XLimit { get; }
         public int YLimit { get; }
 
@@ -41,5 +48,17 @@ namespace Minesweeper
         public int Y { get; }
 
         public FacingDirection Direction { get; }
+
+        public Drone SpinLeft()
+        {
+            FacingDirection newDirection = (FacingDirection)(((int)Direction + 1) % DirectionsCount);
+            return new Drone(this, newDirection);
+        }
+
+        public Drone SpinRight()
+        {
+            FacingDirection newDirection = (FacingDirection)(((int)Direction + DirectionsCount - 1) % DirectionsCount);
+            return new Drone(this, newDirection);
+        }
     }
 }

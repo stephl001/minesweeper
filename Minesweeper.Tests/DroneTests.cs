@@ -180,5 +180,18 @@ namespace Minesweeper.Tests
             });
             res.Should().BeTrue();
         }
+
+        [Fact]
+        public void TestToString()
+        {
+            var drone = new Drone(100, 100, 50, 50, FacingDirection.South);
+            drone.ToString().Should().Be("50 50 S");
+            drone = new Drone(100, 100, 25, 35, FacingDirection.North);
+            drone.ToString().Should().Be("25 35 N");
+            drone = new Drone(100, 100, 10, 15, FacingDirection.West);
+            drone.ToString().Should().Be("10 15 W");
+            drone = new Drone(100, 100, 5, 8, FacingDirection.East);
+            drone.ToString().Should().Be("5 8 E");
+        }
     }
 }

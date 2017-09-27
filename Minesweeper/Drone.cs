@@ -52,6 +52,7 @@ namespace Minesweeper
             Y = y;
             Direction = dir;
             CanMoveForward = _canMovePredicates[dir](this);
+            _strRep = $"{X} {Y} {Direction.ToString()[0]}";
         }
 
         private Drone(Drone sourceDrone, FacingDirection direction)
@@ -68,6 +69,12 @@ namespace Minesweeper
         public FacingDirection Direction { get; }
 
         public bool CanMoveForward { get; }
+
+        private readonly string _strRep;
+        public override string ToString()
+        {
+            return _strRep;
+        }
 
         public Drone SpinLeft()
         {

@@ -25,10 +25,10 @@ namespace Minesweeper
 
         private static IDictionary<FacingDirection, Func<Drone, Drone>> _moveHandlers = new Dictionary<FacingDirection, Func<Drone, Drone>>
         {
-            { FacingDirection.East, d => new Drone(d.XLimit, d.YLimit, d.X+1, d.Y) },
-            { FacingDirection.West, d => new Drone(d.XLimit, d.YLimit, d.X-1, d.Y) },
-            { FacingDirection.North, d => new Drone(d.XLimit, d.YLimit, d.X, d.Y+1) },
-            { FacingDirection.South, d => new Drone(d.XLimit, d.YLimit, d.X, d.Y-1) }
+            { FacingDirection.East, d => new Drone(d.XLimit, d.YLimit, d.X+1, d.Y, d.Direction) },
+            { FacingDirection.West, d => new Drone(d.XLimit, d.YLimit, d.X-1, d.Y, d.Direction) },
+            { FacingDirection.North, d => new Drone(d.XLimit, d.YLimit, d.X, d.Y+1, d.Direction) },
+            { FacingDirection.South, d => new Drone(d.XLimit, d.YLimit, d.X, d.Y-1, d.Direction) }
         };
 
         public Drone(int xlimit, int ylimit, int x, int y)

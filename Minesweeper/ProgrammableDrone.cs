@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,7 +33,7 @@ namespace Minesweeper
         {
             Drone startingDrone = this;
             Drone finalDrone = GetCommandsFromProgram().Aggregate(startingDrone, (currentDrone, command) => command(currentDrone));
-            if (ReferenceEquals(startingDrone, finalDrone))
+            if (ReferenceEquals(this, finalDrone))
                 return this;
 
             return new ProgrammableDrone(finalDrone);

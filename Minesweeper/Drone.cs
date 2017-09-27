@@ -15,7 +15,7 @@ namespace Minesweeper
     {
         private const int DirectionsCount = 4;
 
-        private static IDictionary<FacingDirection, Predicate<Drone>> _canMovePredicates = new Dictionary<FacingDirection, Predicate<Drone>>
+        private static readonly IDictionary<FacingDirection, Predicate<Drone>> _canMovePredicates = new Dictionary<FacingDirection, Predicate<Drone>>
         {
             { FacingDirection.East, d => d.X < d.XLimit },
             { FacingDirection.West, d => d.X > 0 },
@@ -23,7 +23,7 @@ namespace Minesweeper
             { FacingDirection.South, d => d.Y > 0 }
         };
 
-        private static IDictionary<FacingDirection, Func<Drone, Drone>> _moveHandlers = new Dictionary<FacingDirection, Func<Drone, Drone>>
+        private static readonly IDictionary<FacingDirection, Func<Drone, Drone>> _moveHandlers = new Dictionary<FacingDirection, Func<Drone, Drone>>
         {
             { FacingDirection.East, d => new Drone(d.XLimit, d.YLimit, d.X+1, d.Y, d.Direction) },
             { FacingDirection.West, d => new Drone(d.XLimit, d.YLimit, d.X-1, d.Y, d.Direction) },
@@ -46,6 +46,7 @@ namespace Minesweeper
                 throw new ArgumentOutOfRangeException(nameof(x), "X position must be greater or equal to 0 and less or equal to XLimit.");
             if ((y < 0) || (y > ylimit))
                 throw new ArgumentOutOfRangeException(nameof(y), "Y position must be greater or equal to 0 and less or equal to YLimit.");
+
             XLimit = xlimit;
             YLimit = ylimit;
             X = x;

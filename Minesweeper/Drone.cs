@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Minesweeper
 {
@@ -13,6 +14,22 @@ namespace Minesweeper
     public class Drone
     {
         private const int DirectionsCount = 4;
+
+        private static IDictionary<FacingDirection, Predicate<Drone>> _canMovePredicates = new Dictionary<FacingDirection, Predicate<Drone>>
+        {
+            { FacingDirection.East, d => d.X < d.XLimit },
+            { FacingDirection.West, d => d.X > 0 },
+            { FacingDirection.North, d => d.Y < d.YLimit },
+            { FacingDirection.South, d => d.Y > 0 }
+        };
+
+        private static IDictionary<FacingDirection, Func<Drone, Drone>> _moveHandlers = new Dictionary<FacingDirection, Func<Drone, Drone>>
+        {
+            { FacingDirection.East, d => new Drone(d.XLimit, d.YLimit, d.X+1, d.Y) },
+            { FacingDirection.West, d => new Drone(d.XLimit, d.YLimit, d.X-1, d.Y) },
+            { FacingDirection.North, d => new Drone(d.XLimit, d.YLimit, d.X, d.Y+1) },
+            { FacingDirection.South, d => new Drone(d.XLimit, d.YLimit, d.X, d.Y-1) }
+        };
 
         public Drone(int xlimit, int ylimit, int x, int y)
             : this(xlimit, ylimit, x, y, FacingDirection.East)
@@ -34,6 +51,7 @@ namespace Minesweeper
             X = x;
             Y = y;
             Direction = dir;
+            CanMoveForward = _canMovePredicates[dir](this);
         }
 
         private Drone(Drone sourceDrone, FacingDirection direction)
@@ -49,6 +67,8 @@ namespace Minesweeper
 
         public FacingDirection Direction { get; }
 
+        public bool CanMoveForward { get; }
+
         public Drone SpinLeft()
         {
             FacingDirection newDirection = (FacingDirection)(((int)Direction + 1) % DirectionsCount);
@@ -59,6 +79,14 @@ namespace Minesweeper
         {
             FacingDirection newDirection = (FacingDirection)(((int)Direction + DirectionsCount - 1) % DirectionsCount);
             return new Drone(this, newDirection);
+        }
+
+        public Drone MoveForward()
+        {
+            if (!CanMoveForward)
+                return this;
+
+            return _moveHandlers[Direction](this);
         }
     }
 }

@@ -24,9 +24,6 @@ The first line gives the upper-right coordinates of the battlefield. The rest of
 
 Each drone will move sequentially, which means that the second drone won’t start to move until the first one has finished moving.
 
-### Description of the output:
-
-The output for each drone should be its final co-ordinates and heading.
 Example of input:
 
     5 5
@@ -36,3 +33,7 @@ Example of input:
     <*<*<*<**
     3 3 E
     **>**>*>>*
+
+### Description of the output:
+
+The output for each drone should be its final co-ordinates and heading.

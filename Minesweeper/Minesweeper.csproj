@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Drone.cs" />
+    <Compile Include="Input\ILineReader.cs" />
     <Compile Include="ProgrammableDrone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

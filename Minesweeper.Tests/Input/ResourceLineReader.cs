@@ -1,32 +1,40 @@
 ﻿using Minesweeper.Input;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Minesweeper.Tests.Input
 {
     public sealed class ResourceLineReader : ILineReader
     {
-        private readonly string _resourcePath;
+        private readonly StreamReader _reader;
 
         internal ResourceLineReader(string resourceName)
         {
-            _resourcePath = $"Minesweeper.Tests.Input.{resourceName}";
+            string resourcePath = $"Minesweeper.Tests.Input.{resourceName}";
+
+            Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath);
+            _reader = new StreamReader(s);
+            EndOfStream = _reader.EndOfStream;
+        }
+
+        public bool EndOfStream { get; private set; }
+
+        private bool _disposed = false;
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+
+            _reader.Dispose();
         }
 
         public IEnumerable<string> ReadLines()
         {
-            using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(_resourcePath))
+            while (!_reader.EndOfStream)
             {
-                using (StreamReader sr = new StreamReader(s))
-                {
-                    while (!sr.EndOfStream)
-                        yield return sr.ReadLine();
-                }
+                yield return _reader.ReadLine();
+                EndOfStream = _reader.EndOfStream;
             }
         }
     }

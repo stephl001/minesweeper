@@ -11,8 +11,12 @@ namespace Minesweeper.Tests
         [Fact]
         public void TestReadLines()
         {
-            ILineReader linereader = new ResourceLineReader("Sample.txt");
-            linereader.ReadLines().Count().Should().Be(7);
+            using (ILineReader linereader = new ResourceLineReader("Sample.txt"))
+            {
+                linereader.EndOfStream.Should().BeFalse();
+                linereader.ReadLines().Count().Should().Be(7);
+                linereader.EndOfStream.Should().BeTrue();
+            }
         }
     }
 }

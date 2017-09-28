@@ -1,37 +1,28 @@
-﻿using Minesweeper.Input;
-using System.Collections.Generic;
+﻿using System.IO;
+using System;
+using System.Text;
 
 namespace Minesweeper.Tests.Input
 {
-    public sealed class MemoryLineReader : ILineReader
+    public sealed class MemoryLineReader : StreamReader
     {
         private readonly string[] _allLines;
         private int _currentIndex;
 
         internal MemoryLineReader(string[] lines)
+            : base(GetStreamFromLines(lines))
         {
             _allLines = lines;
         }
 
-        public bool EndOfStream
+        private static Stream GetStreamFromLines(string[] lines)
         {
-            get
-            {
-                return (_currentIndex < _allLines.Length);
-            }
-        }
+            MemoryStream ms = new MemoryStream();
+            using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8, 1024, true))
+                Array.ForEach(lines, sw.WriteLine);
 
-        public void Dispose()
-        {
-        }
-
-        public IEnumerable<string> ReadLines()
-        {
-            foreach (string line in _allLines)
-            {
-                yield return line;
-                _currentIndex++;
-            }
+            ms.Seek(0L, SeekOrigin.Begin);
+            return ms;
         }
     }
 }

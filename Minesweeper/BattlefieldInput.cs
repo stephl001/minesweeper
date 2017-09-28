@@ -1,6 +1,7 @@
 ﻿using Minesweeper.Input;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Minesweeper
@@ -19,7 +20,7 @@ namespace Minesweeper
             internal int YLimit;
         }
 
-        public BattlefieldInput(ILineReader reader)
+        public BattlefieldInput(StreamReader reader)
         {
             if (reader == null)
                 throw new ArgumentNullException("reader");
@@ -27,22 +28,20 @@ namespace Minesweeper
             ProgrammableDrones = ReadDronesFromInput(reader).AsReadOnly();
         }
 
-        private static List<ProgrammableDrone> ReadDronesFromInput(ILineReader reader)
+        private static List<ProgrammableDrone> ReadDronesFromInput(StreamReader reader)
         {
-            string[] allLines = reader.ReadLines().ToArray();
-            if (allLines.Length == 0)
+            if (reader.EndOfStream)
                 throw new BattlefieldInputFormatException("Input cannot be empty.");
-            if (allLines.Length %2 == 0)
-                throw new BattlefieldInputFormatException("Number of lines in input must be odd.");
-
-            InputLimit limits = ReadInputLimits(allLines[0]);
+            
+            InputLimit limits = ReadInputLimits(reader);
             return new List<ProgrammableDrone>();
         }
 
-        private static InputLimit ReadInputLimits(string line)
+        private static InputLimit ReadInputLimits(TextReader reader)
         {
             try
             {
+                string line = reader.ReadLine();
                 int[] limits = line.Split(' ').Select(int.Parse).ToArray();
                 if (limits.Length != 2)
                     throw GetLimitException();

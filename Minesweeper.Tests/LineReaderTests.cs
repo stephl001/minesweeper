@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Minesweeper.Input;
 using Minesweeper.Tests.Input;
+using System.IO;
 using System.Linq;
 using Xunit;
 
@@ -11,10 +12,22 @@ namespace Minesweeper.Tests
         [Fact]
         public void TestReadLines()
         {
-            using (ILineReader linereader = new ResourceLineReader("Sample.txt"))
+            using (StreamReader linereader = new ResourceLineReader("Sample.txt"))
             {
                 linereader.EndOfStream.Should().BeFalse();
-                linereader.ReadLines().Count().Should().Be(7);
+                int lineCount = 0;
+                while (linereader.ReadLine() != null)
+                    lineCount++;
+                lineCount.Should().Be(7);
+                linereader.EndOfStream.Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public void TestMemoryReadLines()
+        {
+            using (StreamReader linereader = new MemoryLineReader(new string[] { }))
+            {
                 linereader.EndOfStream.Should().BeTrue();
             }
         }

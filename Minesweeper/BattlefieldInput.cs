@@ -15,8 +15,8 @@ namespace Minesweeper
                 YLimit = ylimit;
             }
 
-            public int XLimit { get; }
-            public int YLimit { get; }
+            internal int XLimit;
+            internal int YLimit;
         }
 
         public BattlefieldInput(ILineReader reader)
@@ -33,11 +33,10 @@ namespace Minesweeper
             if (allLines.Length == 0)
                 throw new BattlefieldInputFormatException("Input cannot be empty.");
             if (allLines.Length %2 == 0)
-                throw new BattlefieldInputFormatException("Number of input lines must be odd.");
+                throw new BattlefieldInputFormatException("Number of lines in input must be odd.");
 
             InputLimit limits = ReadInputLimits(allLines[0]);
-
-            throw new NotImplementedException();
+            return new List<ProgrammableDrone>();
         }
 
         private static InputLimit ReadInputLimits(string line)

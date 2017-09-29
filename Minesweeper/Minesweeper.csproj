@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Battlefield.cs" />
     <Compile Include="BattlefieldInput.cs" />
     <Compile Include="Input\BattlefieldInputFormatException.cs" />
     <Compile Include="Drone.cs" />

@@ -94,6 +94,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Input\Sample.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Input\Sample2ExpectedOutput.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Input\Sample2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Input\SampleExpectedOutput.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

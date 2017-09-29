@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BattlefieldInputTests.cs" />
+    <Compile Include="BattleFieldTests.cs" />
     <Compile Include="DroneTests.cs" />
     <Compile Include="Input\MemoryLineReader.cs" />
     <Compile Include="Input\ResourceLineReader.cs" />

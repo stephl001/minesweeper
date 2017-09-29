@@ -2,6 +2,7 @@
 using Minesweeper.Input;
 using Minesweeper.Tests.Input;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace Minesweeper.Tests
@@ -18,23 +19,36 @@ namespace Minesweeper.Tests
         [Fact]
         public void TestBadLimitInitialization()
         {
-            Action act = () => new BattlefieldInput(new MemoryLineReader(new string[] { }));
+            var input = new BattlefieldInput(new MemoryLineReader(new string[] { }));
+            Action act = () => input.GetProgrammableDrones().Count();
             act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("Input cannot be empty.");
-            act = () => new BattlefieldInput(new MemoryLineReader(new string[] { "a" }));
-            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("First input line must contain exactly two positive integers separated by a space.");
-            act.ShouldThrow<BattlefieldInputFormatException>().And.InnerException.Should().BeOfType<FormatException>();
-            act = () => new BattlefieldInput(new MemoryLineReader(new string[] { "" }));
-            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("First input line must contain exactly two positive integers separated by a space.");
-            act = () => new BattlefieldInput(new MemoryLineReader(new string[] { "8 a" }));
-            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("First input line must contain exactly two positive integers separated by a space.");
-            act = () => new BattlefieldInput(new MemoryLineReader(new string[] { "9" }));
-            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("First input line must contain exactly two positive integers separated by a space.");
-            act = () => new BattlefieldInput(new MemoryLineReader(new string[] { "-9 12" }));
-            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("First input line must contain exactly two positive integers separated by a space.");
-            act = () => new BattlefieldInput(new MemoryLineReader(new string[] { "9 -12" }));
+
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "a" }));
+            act = () => input.GetProgrammableDrones().Count();
             act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("First input line must contain exactly two positive integers separated by a space.");
 
-            act = () => new BattlefieldInput(new MemoryLineReader(new string[] { "9 12" }));
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "" }));
+            act = () => input.GetProgrammableDrones().Count();
+            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("First input line must contain exactly two positive integers separated by a space.");
+
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "8 a" }));
+            act = () => input.GetProgrammableDrones().Count();
+            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("First input line must contain exactly two positive integers separated by a space.");
+
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "9" }));
+            act = () => input.GetProgrammableDrones().Count();
+            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("First input line must contain exactly two positive integers separated by a space.");
+
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "-9 12" }));
+            act = () => input.GetProgrammableDrones().Count();
+            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("First input line must contain exactly two positive integers separated by a space.");
+
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "9 -12" }));
+            act = () => input.GetProgrammableDrones().Count();
+            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("First input line must contain exactly two positive integers separated by a space.");
+
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "9 12" }));
+            act = () => input.GetProgrammableDrones().Count();
             act.ShouldNotThrow<BattlefieldInputFormatException>();
         }
 
@@ -42,7 +56,39 @@ namespace Minesweeper.Tests
         public void TestNoDronesInitialization()
         {
             var input = new BattlefieldInput(new MemoryLineReader(new string[] { "5 5" }));
-            input.ProgrammableDrones.Should().BeEmpty();
+            input.GetProgrammableDrones().Should().BeEmpty();
+        }
+
+        [Fact]
+        public void TestNoDronesInitializationInvalidFormat()
+        {
+            var input = new BattlefieldInput(new MemoryLineReader(new string[] { "5 5", "anything" }));
+            Action act = () => input.GetProgrammableDrones().Count();
+            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("Missing input line for drone initialization.");
+
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "5 5", "anything", "whatever" }));
+            act = () => input.GetProgrammableDrones().Count();
+            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("Invalid drone initial position format.");
+
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "5 5", "3 2 Z", "whatever" }));
+            act = () => input.GetProgrammableDrones().Count();
+            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("Invalid drone initial position format.");
+
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "5 5", "3", "whatever" }));
+            act = () => input.GetProgrammableDrones().Count();
+            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("Invalid drone initial position format.");
+
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "5 5", "", "whatever" }));
+            act = () => input.GetProgrammableDrones().Count();
+            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("Invalid drone initial position format.");
+
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "5 5", "3 3 W", "wrong program" }));
+            act = () => input.GetProgrammableDrones().Count();
+            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("Invalid drone initial position format.");
+
+            input = new BattlefieldInput(new MemoryLineReader(new string[] { "5 5", "8 3 W", ">***<**" }));
+            act = () => input.GetProgrammableDrones().Count();
+            act.ShouldThrow<BattlefieldInputFormatException>().And.Message.Should().Be("Invalid drone initial position format.");
         }
     }
 }

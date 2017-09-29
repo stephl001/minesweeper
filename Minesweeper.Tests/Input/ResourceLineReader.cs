@@ -5,8 +5,6 @@ namespace Minesweeper.Tests.Input
 {
     public sealed class ResourceLineReader : StreamReader
     {
-        private readonly StreamReader _reader;
-
         internal ResourceLineReader(string resourceName)
             : base(GetStreamFromResourceName(resourceName))
         {            

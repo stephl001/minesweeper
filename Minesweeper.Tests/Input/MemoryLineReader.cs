@@ -6,13 +6,9 @@ namespace Minesweeper.Tests.Input
 {
     public sealed class MemoryLineReader : StreamReader
     {
-        private readonly string[] _allLines;
-        private int _currentIndex;
-
         internal MemoryLineReader(string[] lines)
             : base(GetStreamFromLines(lines))
         {
-            _allLines = lines;
         }
 
         private static Stream GetStreamFromLines(string[] lines)

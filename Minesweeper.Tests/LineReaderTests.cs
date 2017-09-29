@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
-using Minesweeper.Input;
 using Minesweeper.Tests.Input;
 using System.IO;
-using System.Linq;
 using Xunit;
 
 namespace Minesweeper.Tests

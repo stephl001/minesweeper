@@ -12,12 +12,12 @@ namespace Minesweeper
             _input = input;
         }
 
-        public void Execute(StreamWriter sw)
+        public void Execute(TextWriter writer)
         {
             foreach (ProgrammableDrone pd in _input.GetProgrammableDrones())
             {
                 Drone finalDrone = pd.ExecuteProgram();
-                sw.WriteLine(finalDrone.ToString());
+                writer.WriteLine(finalDrone.ToString());
             }
         }
     }

@@ -37,3 +37,20 @@ Example of input:
 ### Description of the output:
 
 The output for each drone should be its final co-ordinates and heading.
+
+## Structure Of The Solution
+The solution is composed of three projects:
+* Minesweeper - This is the library containing all classes necessary to run a battlefield simulation
+* Minesweeper.Tests - All unit tests for the above class library
+* BattlefieldExecutor - A console application that will run a simulation given a file containing a valid input as only argument.
+
+Given a file sample.txt that contains the input of the previous section, you could call 
+```
+BattlefieldExecutor.exe "sample.txt"
+```
+The output would then be:
+```
+5 5 N
+1 3 N
+5 1 E
+```
